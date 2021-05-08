@@ -1,0 +1,44 @@
+server:
+  port: 9999
+spring:
+  datasource:
+    name: resume
+    url: jdbc:mysql://localhost:3306/sql_resume?useUnicode=true&characterEncoding=utf-8&serverTimezone=GMT&useSSL=false&allowPublicKeyRetrieval=true
+    username: root
+    password: 20010615haorun
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  data:
+    mongodb:
+#      authentication-database: admin
+#      database: test
+#      host: 8.135.132.214
+#      port: 27017
+#      username: root
+#      password: 12345678
+      #tmd有病吧 分得要这样配置才行 wc
+      uri:  mongodb://root:12345678@8.135.132.214:27017
+      database: test
+  mail:
+    password: unxtzptqpnysbcfe
+    username: 1019076587@qq.com
+    host: smtp.qq.com
+    properties:
+      mail:
+        smtp:
+          ssl:
+            enable:
+              true
+
+mybatis:
+  type-aliases-package: com.run.resume.pojo
+  mapper-locations: classpath:mybatis/mapper/*.xml
+
+
+
+
+pagehelper:
+  offset-as-page-num: true
+  reasonable: true
+  page-size-zero: true
+  support-methods-arguments: true
+  params: count=countsql
