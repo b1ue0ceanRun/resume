@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.run.resume.mapper.UserMapper">
+    <insert id="addUser" parameterType="com.run.resume.pojo.User" useGeneratedKeys="true">
+        insert into user(id, username, password, enabled, locked, email, phone)
+        values (default, #{username}, #{password}, default, default, #{email}, #{phone})
+    </insert>
+
+    <update id="lockUser">
+        update user
+        set locked = 1
+        where username = #{username}
+    </update>
+    <update id="unlockUser">
+        update user
+        set locked = 0
+        where username = #{username}
+    </update>
+    <update id="updateUploadTime">
+        update user_uploadtime
+        set D#{did} = D#{did} +  1
+        where uid = #{uid};
+    </update>
+    <update id="updateAllUploadTime">
+        update user_uploadtime
+        set D1 =0,
+            D2=0,
+            D3=0,
+            D4=0,
+            D5=0,
+            D6=0,
+            D7=0;
+    </update>
+    <insert id="setUserRole">
+        insert into user_role(id, uid, rid) VALUE (default, #{uid}, 3)
+    </insert>
+    <insert id="setAdminRole">
+        insert into user_role(id, uid, rid)
+        values (default, #{uid}, 2)
+    </insert>
+    <insert id="insertUploadTime">
+        insert into user_uploadtime(uid, D1, D2, D3, D4, D5, D6, D7)
+        values (#{uid}, 0, 0, 0, 0, 0, 0, 0);
+    </insert>
+    <insert id="insertUserDirection">
+        insert into user_direction(uid, D1, D2, D3, D4, D5, D6, D7) VALUE (#{uid},0,0,0,0,0,0,0);
+    </insert>
+
+    <delete id="deleteUser">
+        delete
+        from user
+        where username = #{username}
+    </delete>
+
+    <select id="loadUserByUsername" resultType="com.run.resume.pojo.User">
+        select *
+        from user
+        where username = #{username};
+    </select>
+    <select id="getUserRolesByUid" resultType="com.run.resume.pojo.Role">
+        select *
+        from role r,
+             user_role ur
+        where r.id = ur.rid
+          and ur.uid = #{id}
+    </select>
+    <select id="getUidByUsername" resultType="java.lang.Integer">
+        select id
+        from user
+        where username = #{username}
+    </select>
+    <select id="ShowAdminInfo" resultType="com.run.resume.pojo.User">
+        select *
+        from user_role,
+             user
+        where rid = 2
+          and user_role.uid = user.id
+    </select>
+    <select id="ShowUncheckedUserInfo" resultType="java.lang.Integer">
+        select uid
+        from file
+        where ischeck = 0
+          and uid = #{did}
+    </select>
+    <select id="loadUserByUid" resultType="com.run.resume.pojo.User">
+        select *
+        from user
+        where id = #{uid};
+    </select>
+    <select id="findUploadTime" resultType="java.lang.Integer">
+        select D#{param2}
+        from user_uploadtime
+        where uid = #{uid};
+    </select>
+    <select id="findNumberOfStudent" resultType="java.lang.Integer">
+        select count(*) from user_direction where #{direction} = 1;
+    </select>
+</mapper>
